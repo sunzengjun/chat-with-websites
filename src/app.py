@@ -35,9 +35,7 @@ def get_context_retriever_chain(vector_store):
     retriever = vector_store.as_retriever()
     
     prompt = ChatPromptTemplate.from_messages([
-      MessagesPlaceholder(variable_name="context"),
       ("user", "{input}"),
-      ("user", "Given the above conversation, generate a search query to look up in order to get information relevant to the conversation")
     ])
     
     retriever_chain = create_history_aware_retriever(llm, retriever, prompt)
@@ -49,10 +47,6 @@ def get_conversational_rag_chain(retriever_chain):
     llm = ChatGoogleGenerativeAI(model="gemini-pro")
     
     prompt = ChatPromptTemplate.from_messages([
-      SystemMessage(
-            content="Answer the user's questions based on the below context:\n\n{context}"
-      ),  # The persistent system prompt
-      MessagesPlaceholder(variable_name="context"),
       HumanMessagePromptTemplate.from_template(
             "{input}"
       ),  # Where the human input will injected
@@ -67,7 +61,6 @@ def get_response(user_input):
     conversation_rag_chain = get_conversational_rag_chain(retriever_chain)
     
     response = conversation_rag_chain.invoke({
-        "context": st.session_state.chat_history,
         "input": user_query
     })
     
