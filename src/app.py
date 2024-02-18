@@ -5,11 +5,11 @@ from langchain_core.messages import AIMessage, HumanMessage
 from langchain_community.document_loaders import WebBaseLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import Chroma
-from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from dotenv import load_dotenv
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain.chains import create_history_aware_retriever, create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
+from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI 
 
 
 load_dotenv()
@@ -24,12 +24,13 @@ def get_vectorstore_from_url(url):
     document_chunks = text_splitter.split_documents(document)
     
     # create a vectorstore from the chunks
-    vector_store = Chroma.from_documents(document_chunks, OpenAIEmbeddings())
+    embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+    vector_store = Chroma.from_documents(document_chunks, embeddings)
 
     return vector_store
 
 def get_context_retriever_chain(vector_store):
-    llm = ChatOpenAI()
+    llm = ChatGoogleGenerativeAI(model="gemini-pro")
     
     retriever = vector_store.as_retriever()
     
@@ -45,7 +46,7 @@ def get_context_retriever_chain(vector_store):
     
 def get_conversational_rag_chain(retriever_chain): 
     
-    llm = ChatOpenAI()
+    llm = ChatGoogleGenerativeAI(model="gemini-pro")
     
     prompt = ChatPromptTemplate.from_messages([
       ("system", "Answer the user's questions based on the below context:\n\n{context}"),
@@ -53,7 +54,7 @@ def get_conversational_rag_chain(retriever_chain):
       ("user", "{input}"),
     ])
     
-    stuff_documents_chain = create_stuff_documents_chain(llm,prompt)
+    stuff_documents_chain = create_stuff_documents_chain(llm, prompt)
     
     return create_retrieval_chain(retriever_chain, stuff_documents_chain)
 
