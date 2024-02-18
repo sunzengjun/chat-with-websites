@@ -52,7 +52,7 @@ def get_conversational_rag_chain(retriever_chain):
       SystemMessage(
             content="Answer the user's questions based on the below context:\n\n{context}"
       ),  # The persistent system prompt
-      MessagesPlaceholder(variable_name="chat_history"),
+      MessagesPlaceholder(variable_name="context"),
       HumanMessagePromptTemplate.from_template(
             "{input}"
       ),  # Where the human input will injected
@@ -67,7 +67,7 @@ def get_response(user_input):
     conversation_rag_chain = get_conversational_rag_chain(retriever_chain)
     
     response = conversation_rag_chain.invoke({
-        "chat_history": st.session_state.chat_history,
+        "context": st.session_state.chat_history,
         "input": user_query
     })
     
