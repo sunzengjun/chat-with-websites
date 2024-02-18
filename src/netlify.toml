@@ -1,2 +1,0 @@
-[context.production]
-          command = "streamlit run src/app.py"
