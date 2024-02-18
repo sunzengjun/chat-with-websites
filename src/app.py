@@ -47,7 +47,7 @@ def get_conversational_rag_chain(retriever_chain):
     llm = ChatGoogleGenerativeAI(model="gemini-pro")
     
     
-    prompt = ChatPromptTemplate.from_template("""Answer the following question based only on the provided context:
+    prompt = ChatPromptTemplate.from_template("""Answer the following question based only on the provided context in Chinese:
     <context>
     {context}
     </context>
@@ -68,8 +68,8 @@ def get_response(user_input):
     return response['answer']
 
 # app config
-st.set_page_config(page_title="Chat with websites", page_icon="🤖")
-st.title("Chat with websites")
+st.set_page_config(page_title="网页内容问题解答", page_icon="🤖")
+st.title("网页内容问题解答")
 
 # sidebar
 with st.sidebar:
@@ -83,13 +83,13 @@ else:
     # session state
     if "chat_history" not in st.session_state:
         st.session_state.chat_history = [
-            AIMessage(content="Hello, I am a bot. How can I help you?"),
+            AIMessage(content="你好，我可以回答关于这个网页内容的问题"),
         ]
     if "vector_store" not in st.session_state:
         st.session_state.vector_store = get_vectorstore_from_url(website_url)    
 
     # user input
-    user_query = st.chat_input("Type your message here...")
+    user_query = st.chat_input("输入关于网页内容的问题...")
     if user_query is not None and user_query != "":
         response = get_response(user_query)
         st.session_state.chat_history.append(HumanMessage(content=user_query))
