@@ -35,7 +35,7 @@ def get_context_retriever_chain(vector_store):
     retriever = vector_store.as_retriever()
     
     prompt = ChatPromptTemplate.from_messages([
-      MessagesPlaceholder(variable_name="chat_history"),
+      MessagesPlaceholder(variable_name="context"),
       ("user", "{input}"),
       ("user", "Given the above conversation, generate a search query to look up in order to get information relevant to the conversation")
     ])
@@ -67,7 +67,7 @@ def get_response(user_input):
     conversation_rag_chain = get_conversational_rag_chain(retriever_chain)
     
     response = conversation_rag_chain.invoke({
-        "context": "",
+        "context": st.session_state.chat_history,
         "input": user_query
     })
     
