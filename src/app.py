@@ -67,7 +67,7 @@ def get_response(user_input):
     conversation_rag_chain = get_conversational_rag_chain(retriever_chain)
     
     response = conversation_rag_chain.invoke({
-        "context": st.session_state.chat_history,
+        "context": "",
         "input": user_query
     })
     
