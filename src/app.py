@@ -77,7 +77,7 @@ with st.sidebar:
     website_url = st.text_input("网页URL")
 
 if website_url is None or website_url == "":
-    st.info("请输入网页URL")
+    st.info("请在左侧输入网页URL")
 
 else:
     # session state
