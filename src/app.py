@@ -46,11 +46,12 @@ def get_conversational_rag_chain(retriever_chain):
     
     llm = ChatGoogleGenerativeAI(model="gemini-pro")
     
-    prompt = ChatPromptTemplate.from_messages([
-      HumanMessagePromptTemplate.from_template(
-            "{input}"
-      ),  # Where the human input will injected
-    ])
+    
+    prompt = ChatPromptTemplate.from_template("""Answer the following question based only on the provided context:
+    <context>
+    {context}
+    </context>
+    Question: {input}""")
     
     stuff_documents_chain = create_stuff_documents_chain(llm, prompt)
     
