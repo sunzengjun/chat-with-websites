@@ -12,7 +12,7 @@ from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI 
 
 
-load_dotenv()
+load_dotenv(find_dotenv())
 
 def get_vectorstore_from_url(url):
     # get the text in document form
