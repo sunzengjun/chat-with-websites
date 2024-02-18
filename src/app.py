@@ -73,11 +73,11 @@ st.title("网页内容问题解答")
 
 # sidebar
 with st.sidebar:
-    st.header("Settings")
-    website_url = st.text_input("Website URL")
+    st.header("设置")
+    website_url = st.text_input("网页URL")
 
 if website_url is None or website_url == "":
-    st.info("Please enter a website URL")
+    st.info("请输入网页URL")
 
 else:
     # session state
